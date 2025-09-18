@@ -40,10 +40,10 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen  bg-background">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card ">
-        <div className="mx-auto px-4 py-4 flex items-center justify-between max-w-[80rem]">
+      <header className="border-b border-border bg-card">
+        <div className="mx-auto p-6 flex items-center justify-between max-w-[80rem]">
           <h1 className="text-2xl font-bold text-foreground">
             Informacion Personal
           </h1>
@@ -58,7 +58,7 @@ export const HomePage = () => {
 
       <div className="mx-auto max-w-[80rem] px-4 py-8">
         {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"> */}
-        <Card className="grid grid-cols-3 px-4">
+        <div className="grid grid-cols-3 gap-x-4">
           <Card className="col-span-2">
             <CardHeader>
               <CardTitle className="text-2xl text-primary">
@@ -89,7 +89,7 @@ export const HomePage = () => {
                     </h3>
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-primary">
-                        {currentUser.status}
+                        {currentUser.role}
                       </Badge>
                     </div>
                   </div>
@@ -118,7 +118,7 @@ export const HomePage = () => {
               </Button>
             </CardContent>
           </Card>
-        </Card>
+        </div>
       </div>
     </div>
   );
