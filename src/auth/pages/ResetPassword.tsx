@@ -92,7 +92,7 @@ export const ResetPasswordPage = () => {
 
           <div className="mt-4 text-center">
             <Link
-              to="/"
+              to={"/auth"}
               className="text-sm text-muted-foreground hover:text-primary"
             >
               <ArrowLeft className="w-4 h-4 inline mr-1" />

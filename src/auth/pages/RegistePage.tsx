@@ -1,6 +1,3 @@
-import type React from "react";
-
-import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,122 +9,171 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { registerAction } from "../actions/register.action";
+
+interface userData {
+  name: string;
+  email: string;
+  password: string;
+  secondPassword: string;
+}
 
 export const RegisterPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<userData>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      secondPassword: "",
+    },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const rootLocation = window.location.origin;
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: userData) => {
+    if (data.password !== data.secondPassword) return;
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
+    await registerAction(data.name, data.email, data.password, rootLocation);
 
-    // Aquí conectarías con tu backend
-    console.log("Register attempt:", formData);
-    // Simular registro exitoso
-    alert("Registro exitoso! Ahora puedes iniciar sesión");
-    window.location.href = "/";
+    reset();
   };
 
   return (
     <>
-      <div>
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">Crear Cuenta</h1>
-          <p className="text-muted-foreground">Regístrate para comenzar</p>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Registro</CardTitle>
-            <CardDescription>
-              Completa los datos para crear tu cuenta
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre Completo</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Tu nombre completo"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
-                <Input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <Button type="submit" className="w-full">
-                Crear Cuenta
-              </Button>
-            </form>
-
-            <div className="mt-4 text-center">
-              <div className="text-sm text-muted-foreground">
-                ¿Ya tienes cuenta?{" "}
-                <Link to="/" className="text-primary hover:underline">
-                  Inicia sesión aquí
-                </Link>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="text-center space-y-2">
+        <h1 className="text-3xl font-bold text-foreground">Crear Cuenta</h1>
+        <p className="text-muted-foreground">Regístrate para comenzar</p>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Registro</CardTitle>
+          <CardDescription>
+            Completa los datos para crear tu cuenta
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Tu nombre completo"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "El nombre es obligatorio",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "El nombre debe tener al menos 3 caracteres",
+                  },
+                })}
+              />
+              {errors.name && (
+                <span className="text-red-500 text-sm">
+                  {errors.name.message}
+                </span>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Correo Electrónico</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="tu@email.com"
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "El correo es obligatorio",
+                  },
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "El correo no es válido",
+                  },
+                })}
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es obligatorio",
+                  },
+                  minLength: {
+                    value: 5,
+                    message: "La contraseña debe tener al menos 5 caracteres",
+                  },
+                })}
+              />
+              {errors.password && (
+                <span className="text-red-500 text-sm">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                {...register("secondPassword", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es obligatorio",
+                  },
+                  minLength: {
+                    value: 5,
+                    message: "La contraseña debe tener al menos 5 caracteres",
+                  },
+                })}
+              />
+              {errors.secondPassword && (
+                <span className="text-red-500 text-sm">
+                  {errors.secondPassword.message}
+                </span>
+              )}
+            </div>
+
+            <Button type="submit" className="w-full">
+              Crear Cuenta
+            </Button>
+          </form>
+
+          <div className="mt-4 text-center">
+            <div className="text-sm text-muted-foreground">
+              ¿Ya tienes cuenta?{" "}
+              <Link
+                to="/auth"
+                className="text-primary hover:underline font-semibold"
+              >
+                Inicia sesión aquí
+              </Link>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 };

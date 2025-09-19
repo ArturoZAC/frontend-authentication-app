@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail } from "lucide-react";
+// import { Calendar, Mail } from "lucide-react";
 
 export const UserCard = ({
   user,
@@ -45,6 +46,10 @@ export const UserCard = ({
           <Mail className="w-4 h-4" />
           <span>{user.email}</span>
         </div>
+        {/* <div className="flex items-center justify-center space-x-2 text-muted-foreground">
+          <Calendar className="w-4 h-4" />
+          <span>Miembro desde {user.joinDate}</span>
+        </div> */}
       </div>
     </CardContent>
   </Card>

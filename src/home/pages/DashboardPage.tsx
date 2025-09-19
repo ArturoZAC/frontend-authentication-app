@@ -82,8 +82,8 @@ export const DashboardPage = () => {
         <div className="mx-auto p-6 max-w-[80rem]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link to="/dashboard">
-                <Button variant="outline" size="sm">
+              <Link to="/">
+                <Button variant="default" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Volver al Dashboard
                 </Button>

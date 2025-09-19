@@ -10,6 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LogOut, Users, Mail } from "lucide-react";
+import { Link } from "react-router";
 
 // Datos simulados del usuario - en tu app real vendrían del backend
 const currentUser = {
@@ -30,13 +31,11 @@ export const HomePage = () => {
   const handleLogout = () => {
     // Aquí conectarías con tu backend para cerrar sesión
     console.log("Logging out...");
-    window.location.href = "/";
   };
 
   const handleShowUsers = () => {
     setShowUsers(true);
     // Redirigir a la página de usuarios
-    window.location.href = "/users";
   };
 
   return (
@@ -48,10 +47,12 @@ export const HomePage = () => {
             Informacion Personal
           </h1>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Cerrar Sesión
-            </Button>
+            <Link to={"/auth/login"}>
+              <Button variant="destructive" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar Sesión
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -112,10 +113,12 @@ export const HomePage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button onClick={handleShowUsers} className="w-full" size="lg">
-                <Users className="w-5 h-5 mr-2" />
-                Ver Otros Usuarios
-              </Button>
+              <Link to={"/dashboard"}>
+                <Button onClick={handleShowUsers} className="w-full" size="lg">
+                  <Users className="w-5 h-5 mr-2" />
+                  Ver Otros Usuarios
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

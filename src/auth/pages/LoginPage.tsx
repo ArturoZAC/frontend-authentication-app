@@ -87,14 +87,17 @@ export const LoginPage = () => {
 
           <div className="mt-4 text-center space-y-2">
             <Link
-              to="/reset-password"
-              className="text-sm text-primary hover:underline"
+              to="/auth/reset-password"
+              className="text-sm font-semibold text-primary hover:underline"
             >
               ¿Olvidaste tu contraseña?
             </Link>
             <div className="text-sm text-muted-foreground">
               ¿No tienes cuenta?{" "}
-              <Link to="/register" className="text-primary hover:underline">
+              <Link
+                to={"/auth/register"}
+                className="text-primary hover:underline font-semibold"
+              >
                 Regístrate aquí
               </Link>
             </div>

@@ -10,6 +10,7 @@ import { AuthLayout } from "@/auth/layouts/AuthLayout";
 import { LoginPage } from "@/auth/pages/LoginPage";
 import { RegisterPage } from "@/auth/pages/RegistePage";
 import { ResetPasswordPage } from "@/auth/pages/ResetPassword";
+import { VerifyEmail } from "@/auth/pages/VerifyEmail";
 
 export const Approuter = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const Approuter = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
+      {
+        path: "verify-email/:codeVerification",
+        element: <VerifyEmail />,
+      },
     ],
   },
   {
