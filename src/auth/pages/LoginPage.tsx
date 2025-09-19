@@ -24,7 +24,7 @@ export const LoginPage = () => {
     // Aquí conectarías con tu backend
     console.log("Login attempt:", { email, password, rememberMe });
     // Simular login exitoso - redirigir al dashboard
-    window.location.href = "/dashboard";
+    window.location.href = "/";
   };
 
   return (
