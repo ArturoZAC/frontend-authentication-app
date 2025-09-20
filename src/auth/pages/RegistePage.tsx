@@ -1,4 +1,7 @@
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { registerAction } from "../actions/register.action";
+import { useAuthCentralized } from "../hooks/userAuthCentralized";
 
 interface userData {
   name: string;
@@ -35,13 +37,31 @@ export const RegisterPage = () => {
   });
 
   const rootLocation = window.location.origin;
+  const { mutation: mutationRegister } = useAuthCentralized();
 
   const onSubmit = async (data: userData) => {
     if (data.password !== data.secondPassword) return;
 
-    await registerAction(data.name, data.email, data.password, rootLocation);
-
+    // await registerAction(data.name, data.email, data.password, rootLocation);
     reset();
+    await mutationRegister.mutateAsync(
+      {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        rootLocation: rootLocation,
+      },
+      {
+        onSuccess: () => {
+          toast.success(
+            "Te has registrado correctamente. Revisa tu correo para continuar con la verificación."
+          );
+        },
+        onError: () => {
+          toast.error("Correo ya registrado.");
+        },
+      }
+    );
   };
 
   return (
@@ -156,8 +176,19 @@ export const RegisterPage = () => {
               )}
             </div>
 
-            <Button type="submit" className="w-full">
-              Crear Cuenta
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={mutationRegister.isPending}
+            >
+              {mutationRegister.isPending ? (
+                <span className="flex justify-center items-center">
+                  <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
+                  Procesando...
+                </span>
+              ) : (
+                <>Crear Cuenta</>
+              )}
             </Button>
           </form>
 
