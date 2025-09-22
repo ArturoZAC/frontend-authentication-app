@@ -13,13 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthCentralized } from "../hooks/userAuthCentralized";
-
-interface userData {
-  name: string;
-  email: string;
-  password: string;
-  secondPassword: string;
-}
+import type { userData } from "../interfaces/user.response";
 
 export const RegisterPage = () => {
   const {

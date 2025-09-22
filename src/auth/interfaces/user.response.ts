@@ -11,3 +11,10 @@ export interface User {
   password: string;
   createdAt: Date;
 }
+
+export interface userData {
+  name: string;
+  email: string;
+  password: string;
+  secondPassword: string;
+}

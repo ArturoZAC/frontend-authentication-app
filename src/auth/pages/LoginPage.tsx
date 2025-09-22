@@ -1,7 +1,4 @@
-import type React from "react";
-
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,19 +9,48 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useForm } from "react-hook-form";
+import type { userData } from "../interfaces/user.response";
+import { useAuthCentralized } from "../hooks/userAuthCentralized";
+import { toast } from "sonner";
+// import { Checkbox } from "@/components/ui/checkbox";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Omit<userData, "name" | "secondPassword">>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Aquí conectarías con tu backend
-    console.log("Login attempt:", { email, password, rememberMe });
-    // Simular login exitoso - redirigir al dashboard
-    window.location.href = "/";
+  const { mutationLogin } = useAuthCentralized();
+  const navigate = useNavigate();
+
+  const onSubmit = async ({
+    email,
+    password,
+  }: Omit<userData, "name" | "secondPassword">) => {
+    reset();
+    await mutationLogin.mutateAsync(
+      { email, password },
+      {
+        onSuccess: () => {
+          navigate("/");
+        },
+        onError: (error) => {
+          const errorFormat = error.message.toLowerCase();
+          if (errorFormat.includes("password")) {
+            return toast.error("Correo o contraseña incorrectas.");
+          }
+          toast.error("Cuenta no verificada.");
+        },
+      }
+    );
   };
 
   return (
@@ -42,17 +68,29 @@ export const LoginPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="tu@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "El email es obligatorio",
+                  },
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "El correo no es válido",
+                  },
+                })}
               />
+              {errors.email && (
+                <span className="text-red-500 text-sm">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -61,15 +99,25 @@ export const LoginPage = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(e.target.value)
-                }
-                required
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "La contraseña es obligatoria",
+                  },
+                  minLength: {
+                    value: 5,
+                    message: "La contraseña debe tener al menos 5 caracteres",
+                  },
+                })}
               />
+              {errors.password && (
+                <span className="text-red-500 text-sm">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Checkbox
                 id="remember"
                 checked={rememberMe}
@@ -78,10 +126,21 @@ export const LoginPage = () => {
               <Label htmlFor="remember" className="text-sm">
                 Recordarme
               </Label>
-            </div>
+            </div> */}
 
-            <Button type="submit" className="w-full">
-              Iniciar Sesión
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={mutationLogin.isPending}
+            >
+              {mutationLogin.isPending ? (
+                <span className="flex justify-center items-center">
+                  <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
+                  Procesando...
+                </span>
+              ) : (
+                <>Iniciar Sesión</>
+              )}
             </Button>
           </form>
 
