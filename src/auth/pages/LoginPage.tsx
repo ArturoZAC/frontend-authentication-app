@@ -44,7 +44,6 @@ export const LoginPage = () => {
         onSuccess: (data) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { password, ...safeUser } = data.user;
-          localStorage.setItem("token", data.token);
           login(safeUser, data.token);
           navigate("/");
         },

@@ -20,10 +20,19 @@ export const useAuthStore = create<AuthState>()(
     token: null,
     status: "pending",
     login: (dataUser: Omit<User, "password">, dataToken: string | null) => {
+      localStorage.setItem("token", dataToken!);
       set({ user: dataUser, token: dataToken, status: "authorized" });
     },
     logout: () => {
+      localStorage.removeItem("token");
       set({ user: null, token: null, status: "unauthorized" });
+    },
+    renewToken: (
+      dataUser: Omit<User, "password">,
+      dataToken: string | null
+    ) => {
+      localStorage.setItem("token", dataToken!);
+      set({ user: dataUser, token: dataToken, status: "authorized" });
     },
   }))
 );
