@@ -11,6 +11,7 @@ import { LoginPage } from "@/auth/pages/LoginPage";
 import { RegisterPage } from "@/auth/pages/RegistePage";
 import { ResetPasswordPage } from "@/auth/pages/ResetPassword";
 import { VerifyEmail } from "@/auth/pages/VerifyEmail";
+import { ResetPasswordWithCode } from "@/auth/pages/ResetPasswordWithCode";
 
 export const Approuter = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const Approuter = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
+      {
+        path: "reset-password/:codePassword",
+        element: <ResetPasswordWithCode />,
+      },
       {
         path: "verify-email/:codeVerification",
         element: <VerifyEmail />,

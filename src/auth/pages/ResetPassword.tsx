@@ -122,8 +122,19 @@ export const ResetPasswordPage = () => {
               )}
             </div>
 
-            <Button type="submit" className="w-full">
-              Enviar Instrucciones
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={mutationResetPasswordWithEmail.isPending}
+            >
+              {mutationResetPasswordWithEmail.isPending ? (
+                <span className="flex justify-center items-center">
+                  <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
+                  Procesando...
+                </span>
+              ) : (
+                <> Enviar Instrucciones </>
+              )}
             </Button>
           </form>
 
