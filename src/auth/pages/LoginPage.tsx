@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import type { userData } from "../interfaces/user.response";
 import { useAuthCentralized } from "../hooks/userAuthCentralized";
 import { toast } from "sonner";
+import { useAuthStore } from "../store/auth.store";
 // import { Checkbox } from "@/components/ui/checkbox";
 
 export const LoginPage = () => {
@@ -29,6 +30,7 @@ export const LoginPage = () => {
   });
 
   const { mutationLogin } = useAuthCentralized();
+  const { login } = useAuthStore();
   const navigate = useNavigate();
 
   const onSubmit = async ({
@@ -39,7 +41,11 @@ export const LoginPage = () => {
     await mutationLogin.mutateAsync(
       { email, password },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { password, ...safeUser } = data.user;
+          localStorage.setItem("token", data.token);
+          login(safeUser, data.token);
           navigate("/");
         },
         onError: (error) => {

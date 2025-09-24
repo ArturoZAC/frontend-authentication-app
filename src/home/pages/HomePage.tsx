@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LogOut, Users, Mail } from "lucide-react";
 import { Link } from "react-router";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 // Datos simulados del usuario - en tu app real vendrían del backend
 const currentUser = {
@@ -27,15 +28,15 @@ const currentUser = {
 
 export const HomePage = () => {
   const [, setShowUsers] = useState(false);
+  const { logout } = useAuthStore();
 
   const handleLogout = () => {
-    // Aquí conectarías con tu backend para cerrar sesión
-    console.log("Logging out...");
+    localStorage.removeItem("token");
+    logout();
   };
 
   const handleShowUsers = () => {
     setShowUsers(true);
-    // Redirigir a la página de usuarios
   };
 
   return (

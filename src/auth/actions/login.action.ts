@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { authApi } from "@/api/authApi";
-import type { User } from "../interfaces/user.response";
+import type { UserResponse } from "../interfaces/user.response";
 
 interface loginInputs {
   email: string;
@@ -9,7 +9,7 @@ interface loginInputs {
 
 export const loginAction = async ({ email, password }: loginInputs) => {
   try {
-    const { data } = await authApi.post<User>("/auth/login", {
+    const { data } = await authApi.post<UserResponse>("/auth/login", {
       email,
       password,
     });
