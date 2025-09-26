@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthCentralized } from "../hooks/userAuthCentralized";
 import type { userData } from "../interfaces/user.response";
+import { registerAction } from "../actions/register.action";
+import { useState } from "react";
 
 export const RegisterPage = () => {
   const {
@@ -29,33 +30,26 @@ export const RegisterPage = () => {
       secondPassword: "",
     },
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const rootLocation = window.location.origin;
-  const { mutation: mutationRegister } = useAuthCentralized();
 
   const onSubmit = async (data: userData) => {
     if (data.password !== data.secondPassword) return;
-
-    // await registerAction(data.name, data.email, data.password, rootLocation);
     reset();
-    await mutationRegister.mutateAsync(
-      {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        rootLocation: rootLocation,
-      },
-      {
-        onSuccess: () => {
-          toast.success(
-            "Te has registrado correctamente. Revisa tu correo para continuar con la verificación."
-          );
-        },
-        onError: () => {
-          toast.error("Correo ya registrado.");
-        },
-      }
-    );
+    setIsLoading(true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { secondPassword, ...rest } = data;
+    const registerData = await registerAction({ ...rest, rootLocation });
+    setIsLoading(false);
+
+    if (registerData) {
+      toast.success(
+        "Te has registrado correctamente. Revisa tu correo para continuar con la verificación."
+      );
+      return;
+    }
+
+    toast.error("Correo ya registrado.");
   };
 
   return (
@@ -170,12 +164,8 @@ export const RegisterPage = () => {
               )}
             </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={mutationRegister.isPending}
-            >
-              {mutationRegister.isPending ? (
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
                 <span className="flex justify-center items-center">
                   <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
                   Procesando...

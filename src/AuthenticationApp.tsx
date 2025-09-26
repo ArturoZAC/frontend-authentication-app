@@ -1,16 +1,61 @@
+import { type PropsWithChildren } from "react";
 import { RouterProvider } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Approuter } from "./router/AppRouter";
-import { Toaster } from "sonner";
+import { useAuthStore } from "./auth/store/auth.store";
+import { CustomLoader } from "./components/ui/CustomLoader";
 
 const queryClient = new QueryClient();
+
+const RenewTokenAuthProvider = ({ children }: PropsWithChildren) => {
+  // const { renewToken } = useAuthStore();
+  // const [isChecking, setIsChecking] = useState(true);
+
+  // useEffect(() => {
+  //   const verify = async () => {
+  //     try {
+  //       await renewToken();
+  //     } finally {
+  //       setIsChecking(false);
+  //     }
+  //   };
+
+  //   verify();
+
+  //   const interval = setInterval(() => {
+  //     renewToken();
+  //   }, 1000 * 60 * 60 * 23);
+  //   return () => clearInterval(interval);
+  // }, [renewToken]);
+
+  const { renewToken } = useAuthStore();
+
+  const { isLoading } = useQuery({
+    queryKey: ["renew"],
+    queryFn: renewToken,
+    retry: false,
+    refetchInterval: 1000 * 60 * 60 * 23,
+    refetchOnWindowFocus: false,
+  });
+
+  if (isLoading) return <CustomLoader />;
+
+  return children;
+};
 
 export const AuthenticationApp = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-right" richColors />
-      <RouterProvider router={Approuter} />
+      <RenewTokenAuthProvider>
+        <RouterProvider router={Approuter} />
+      </RenewTokenAuthProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

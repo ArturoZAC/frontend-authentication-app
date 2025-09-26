@@ -17,7 +17,7 @@ export const loginAction = async ({ email, password }: loginInputs) => {
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.error);
+      throw error.response?.data.error;
     }
     throw error;
   }

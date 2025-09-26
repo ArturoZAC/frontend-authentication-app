@@ -11,9 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import type { userData } from "../interfaces/user.response";
-import { useAuthCentralized } from "../hooks/userAuthCentralized";
 import { toast } from "sonner";
 import { useAuthStore } from "../store/auth.store";
+import { useState } from "react";
 // import { Checkbox } from "@/components/ui/checkbox";
 
 export const LoginPage = () => {
@@ -29,7 +29,8 @@ export const LoginPage = () => {
     },
   });
 
-  const { mutationLogin } = useAuthCentralized();
+  const [isLoading, setIsLoading] = useState(false);
+
   const { login } = useAuthStore();
   const navigate = useNavigate();
 
@@ -38,24 +39,26 @@ export const LoginPage = () => {
     password,
   }: Omit<userData, "name" | "secondPassword">) => {
     reset();
-    await mutationLogin.mutateAsync(
-      { email, password },
-      {
-        onSuccess: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { password, ...safeUser } = data.user;
-          login(safeUser, data.token);
-          navigate("/");
-        },
-        onError: (error) => {
-          const errorFormat = error.message.toLowerCase();
-          if (errorFormat.includes("password")) {
-            return toast.error("Correo o contraseña incorrectas.");
-          }
-          toast.error("Cuenta no verificada.");
-        },
+
+    setIsLoading(true);
+    const response = await login(email, password);
+    setIsLoading(false);
+
+    if (typeof response === "string") {
+      const errorType = response.toString().toLowerCase();
+
+      if (errorType.includes("password")) {
+        return toast.error("Correo o contraseña incorrectas.");
       }
-    );
+
+      if (errorType.includes("user")) {
+        return toast.error("No se encontró ninguna cuenta con esos datos.");
+      }
+
+      return toast.error("Cuenta no verificada.");
+    }
+
+    return navigate("/");
   };
 
   return (
@@ -133,12 +136,8 @@ export const LoginPage = () => {
               </Label>
             </div> */}
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={mutationLogin.isPending}
-            >
-              {mutationLogin.isPending ? (
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
                 <span className="flex justify-center items-center">
                   <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
                   Procesando...

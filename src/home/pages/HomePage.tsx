@@ -30,11 +30,6 @@ export const HomePage = () => {
   const [, setShowUsers] = useState(false);
   const { logout } = useAuthStore();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    logout();
-  };
-
   const handleShowUsers = () => {
     setShowUsers(true);
   };
@@ -49,7 +44,13 @@ export const HomePage = () => {
           </h1>
           <div className="flex items-center gap-4">
             <Link to={"/auth/login"}>
-              <Button variant="destructive" size="sm" onClick={handleLogout}>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  logout();
+                }}
+              >
                 <LogOut className="w-4 h-4 mr-2" />
                 Cerrar Sesión
               </Button>

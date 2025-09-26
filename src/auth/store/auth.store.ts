@@ -1,17 +1,16 @@
 import { create } from "zustand";
-import type { User } from "../interfaces/user.response";
+import type { User, UserResponse } from "../interfaces/user.response";
 import { devtools } from "zustand/middleware";
+import { renewTokenAction } from "../actions/renewToken.action";
+import { loginAction } from "../actions/login.action";
 
 interface AuthState {
   user: Omit<User, "password"> | null;
   token: string | null;
   status: "pending" | "authorized" | "unauthorized";
-  login: (dataUser: Omit<User, "password">, dataToken: string | null) => void;
+  login: (email: string, password: string) => Promise<string | UserResponse>;
   logout: () => void;
-  renewToken: (
-    dataUser: Omit<User, "password">,
-    dataToken: string | null
-  ) => void;
+  renewToken: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -19,20 +18,39 @@ export const useAuthStore = create<AuthState>()(
     user: null,
     token: null,
     status: "pending",
-    login: (dataUser: Omit<User, "password">, dataToken: string | null) => {
-      localStorage.setItem("token", dataToken!);
-      set({ user: dataUser, token: dataToken, status: "authorized" });
+    login: async (email: string, password: string) => {
+      try {
+        const data = await loginAction({ email, password });
+        localStorage.setItem("token", data.token);
+        set({ user: data.user, token: data.token, status: "authorized" });
+        return data;
+      } catch (error) {
+        localStorage.removeItem("token");
+        set({ user: null, token: null, status: "unauthorized" });
+        return error;
+      }
     },
     logout: () => {
       localStorage.removeItem("token");
       set({ user: null, token: null, status: "unauthorized" });
     },
-    renewToken: (
-      dataUser: Omit<User, "password">,
-      dataToken: string | null
-    ) => {
-      localStorage.setItem("token", dataToken!);
-      set({ user: dataUser, token: dataToken, status: "authorized" });
+    renewToken: async () => {
+      try {
+        const { token: newToken, user } = await renewTokenAction();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...rest } = user;
+
+        if (newToken) {
+          localStorage.setItem("token", newToken);
+        }
+
+        set({ user: rest, token: newToken, status: "authorized" });
+        return true;
+      } catch {
+        localStorage.removeItem("token");
+        set({ user: null, token: null, status: "unauthorized" });
+        return false;
+      }
     },
   }))
 );
