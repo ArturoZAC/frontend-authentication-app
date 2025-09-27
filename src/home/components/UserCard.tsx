@@ -8,26 +8,22 @@ export const UserCard = ({
   user,
 }: {
   user: {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    location: string;
-    joinDate: string;
-    avatar: string;
-    role: string;
-    status: string;
+    emailValidated: boolean;
+    password: string;
+    createdAt: Date;
   };
 }) => (
   <Card className="hover:shadow-md transition-shadow">
     <CardContent className="p-6">
       <div className="flex mx-auto items-center justify-center mb-4 gap-x-6">
         <Avatar className="w-12 h-12">
-          <AvatarImage
-            src={user.avatar || "/placeholder.svg"}
-            alt={user.name}
-          />
+          <AvatarImage src={"/placeholder.svg"} alt={user.name} />
           <AvatarFallback>
             {user.name
+              .toUpperCase()
               .split(" ")
               .map((n) => n[0])
               .join("")}

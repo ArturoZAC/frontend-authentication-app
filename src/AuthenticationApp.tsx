@@ -14,26 +14,6 @@ import { CustomLoader } from "./components/ui/CustomLoader";
 const queryClient = new QueryClient();
 
 const RenewTokenAuthProvider = ({ children }: PropsWithChildren) => {
-  // const { renewToken } = useAuthStore();
-  // const [isChecking, setIsChecking] = useState(true);
-
-  // useEffect(() => {
-  //   const verify = async () => {
-  //     try {
-  //       await renewToken();
-  //     } finally {
-  //       setIsChecking(false);
-  //     }
-  //   };
-
-  //   verify();
-
-  //   const interval = setInterval(() => {
-  //     renewToken();
-  //   }, 1000 * 60 * 60 * 23);
-  //   return () => clearInterval(interval);
-  // }, [renewToken]);
-
   const { renewToken } = useAuthStore();
 
   const { isLoading } = useQuery({

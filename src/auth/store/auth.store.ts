@@ -11,10 +11,12 @@ interface AuthState {
   login: (email: string, password: string) => Promise<string | UserResponse>;
   logout: () => void;
   renewToken: () => Promise<boolean>;
+  setPath: (path: string | null) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   devtools((set) => ({
+    path: null,
     user: null,
     token: null,
     status: "pending",

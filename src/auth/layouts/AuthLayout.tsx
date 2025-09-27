@@ -10,7 +10,9 @@ export const AuthLayout = () => {
   }
 
   if (status === "authorized") {
-    return <Navigate to="/" />;
+    const pathMemory = localStorage.getItem("path");
+
+    return <Navigate to={pathMemory ?? "/"} />;
   }
 
   return (

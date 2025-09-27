@@ -6,14 +6,12 @@ export const UserListItem = ({
   user,
 }: {
   user: {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    location: string;
-    joinDate: string;
-    avatar: string;
-    role: string;
-    status: string;
+    emailValidated: boolean;
+    password: string;
+    createdAt: Date;
   };
 }) => (
   <Card>
@@ -21,12 +19,10 @@ export const UserListItem = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Avatar className="w-10 h-10">
-            <AvatarImage
-              src={user.avatar || "/placeholder.svg"}
-              alt={user.name}
-            />
+            <AvatarImage src={"/placeholder.svg"} alt={user.name} />
             <AvatarFallback>
               {user.name
+                .toUpperCase()
                 .split(" ")
                 .map((n) => n[0])
                 .join("")}

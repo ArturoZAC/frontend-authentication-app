@@ -14,21 +14,10 @@ import { Link } from "react-router";
 import { useAuthStore } from "@/auth/store/auth.store";
 
 // Datos simulados del usuario - en tu app real vendrían del backend
-const currentUser = {
-  id: 1,
-  name: "María González",
-  email: "maria.gonzalez@email.com",
-  phone: "+34 612 345 678",
-  location: "Madrid, España",
-  joinDate: "Enero 2024",
-  avatar: "/professional-woman-avatar.png",
-  role: "Usuario Premium",
-  status: "Activo",
-};
 
 export const HomePage = () => {
   const [, setShowUsers] = useState(false);
-  const { logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const handleShowUsers = () => {
     setShowUsers(true);
@@ -65,7 +54,7 @@ export const HomePage = () => {
           <Card className="col-span-2">
             <CardHeader>
               <CardTitle className="text-2xl text-primary">
-                Bienvenido, {currentUser.name}
+                Bienvenido, {user?.name}
               </CardTitle>
               <CardDescription>
                 Información de tu perfil personal
@@ -75,25 +64,19 @@ export const HomePage = () => {
               <div className="flex items-center space-x-10">
                 <div className="flex flex-row justify-center items-center gap-x-4">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage
-                      src={currentUser.avatar || "/placeholder.svg"}
-                      alt={currentUser.name}
-                    />
+                    <AvatarImage src={"/placeholder.svg"} alt={user?.name} />
                     <AvatarFallback className="text-lg">
-                      {currentUser.name
+                      {user?.name
+                        .toUpperCase()
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="text-xl font-semibold">
-                      {currentUser.name}
-                    </h3>
+                    <h3 className="text-xl font-semibold">{user?.name}</h3>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-primary">
-                        {currentUser.role}
-                      </Badge>
+                      <Badge variant="default">Usuario Premium</Badge>
                     </div>
                   </div>
                 </div>
@@ -101,7 +84,7 @@ export const HomePage = () => {
                   <Mail className="w-5 h-5 text-muted-foreground" />
                   <div>
                     <p className="text-sm text-muted-foreground">Email</p>
-                    <p className="font-medium">{currentUser.email}</p>
+                    <p className="font-medium">{user?.email}</p>
                   </div>
                 </div>
               </div>

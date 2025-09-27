@@ -7,73 +7,17 @@ import { ArrowLeft, Grid3X3, List } from "lucide-react";
 import { UserCard } from "../components/UserCard";
 import { UserListItem } from "../components/UserListItem";
 import { Badge } from "@/components/ui/badge";
-
-// Datos simulados de usuarios - en tu app real vendrían del backend
-const allUsers = [
-  {
-    id: 1,
-    name: "María González",
-    email: "maria.gonzalez@email.com",
-    location: "Madrid, España",
-    joinDate: "Enero 2024",
-    avatar: "/placeholder.svg?key=kv1z1",
-    role: "Usuario Premium",
-    status: "Activo",
-  },
-  {
-    id: 2,
-    name: "Carlos Rodríguez",
-    email: "carlos.rodriguez@email.com",
-    location: "Barcelona, España",
-    joinDate: "Febrero 2024",
-    avatar: "/placeholder.svg?key=kv1z2",
-    role: "Usuario Básico",
-    status: "Activo",
-  },
-  {
-    id: 3,
-    name: "Ana Martínez",
-    email: "ana.martinez@email.com",
-    location: "Valencia, España",
-    joinDate: "Marzo 2024",
-    avatar: "/placeholder.svg?key=kv1z3",
-    role: "Usuario Premium",
-    status: "Inactivo",
-  },
-  {
-    id: 4,
-    name: "Luis Fernández",
-    email: "luis.fernandez@email.com",
-    location: "Sevilla, España",
-    joinDate: "Abril 2024",
-    avatar: "/placeholder.svg?key=kv1z4",
-    role: "Usuario Básico",
-    status: "Activo",
-  },
-  {
-    id: 5,
-    name: "Carmen López",
-    email: "carmen.lopez@email.com",
-    location: "Bilbao, España",
-    joinDate: "Mayo 2024",
-    avatar: "/placeholder.svg?key=kv1z5",
-    role: "Usuario Premium",
-    status: "Activo",
-  },
-  {
-    id: 6,
-    name: "David Sánchez",
-    email: "david.sanchez@email.com",
-    location: "Zaragoza, España",
-    joinDate: "Junio 2024",
-    avatar: "/placeholder.svg?key=kv1z6",
-    role: "Usuario Básico",
-    status: "Activo",
-  },
-];
+import { useUsers } from "../hooks/useUsers";
+import { CustomLoader } from "@/components/ui/CustomLoader";
 
 export const DashboardPage = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  const { users } = useUsers();
+
+  if (users.isLoading) {
+    return <CustomLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,8 +42,10 @@ export const DashboardPage = () => {
 
       <div className="max-w-[80rem] mx-auto px-4 py-8">
         <div className="flex justify-between items-stretch mb-8">
-          <Badge className="max-h-full text-base">Total: 30</Badge>
-          <div>
+          <Badge className="max-h-full text-base">
+            Total: {users.data?.length}
+          </Badge>
+          <div className="grid grid-cols-2 gap-x-4">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="sm"
@@ -119,7 +65,7 @@ export const DashboardPage = () => {
         {/* Estadísticas */}
 
         {/* Lista/Grid de usuarios */}
-        {allUsers.length === 0 ? (
+        {users.data?.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">
@@ -135,7 +81,7 @@ export const DashboardPage = () => {
                 : "space-y-4"
             }
           >
-            {allUsers.map((user) =>
+            {users.data?.map((user) =>
               viewMode === "grid" ? (
                 <UserCard key={user.id} user={user} />
               ) : (
