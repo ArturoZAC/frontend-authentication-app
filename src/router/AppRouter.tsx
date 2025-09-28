@@ -1,6 +1,6 @@
 import {
-  /* createBrowserRouter, */ createHashRouter,
-  Navigate,
+  createBrowserRouter,
+  /* createHashRouter, */ Navigate,
 } from "react-router";
 
 // HOME PAGE
@@ -18,8 +18,8 @@ import { lazy } from "react";
 
 const HomeLayout = lazy(() => import("../home/layouts/HomeLayout"));
 
-// export const Approuter = createBrowserRouter([
-export const Approuter = createHashRouter([
+export const Approuter = createBrowserRouter([
+  // export const Approuter = createHashRouter([
   {
     path: "/",
     element: <HomeLayout />,
