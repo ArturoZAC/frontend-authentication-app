@@ -1,69 +1,45 @@
-# React + TypeScript + Vite
+<h1 align="center">
+  Developer - 4Z4C
+</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div align="center" style="display: flex; flex-direction: row; gap: 20px; justify-content: center; margin: 24px 0px 24px 0px">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Logo" width="135"/>
 
-Currently, two official plugins are available:
+  <img src="https://images.icon-icons.com/2699/PNG/512/nodejs_logo_icon_169910.png" alt="Node.js Logo" width="125"/>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  <img src="https://icon.icepanel.io/Technology/png-shadow-512/Express.png" alt="EX Logo" width="125"/>
+</div>
 
-## Expanding the ESLint configuration
+<br/>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clonar el `.env.template` y crear el `.env`.
+2. Instalar las dependencias del proyecto:
+   ```bash
+   npm install
+   ```
+3. Levantar el proyecto en modo desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Dependencias principales utilizadas en el proyecto:
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **react**: Biblioteca para construir interfaces de usuario.
+- **react-router-dom**: Para manejar el enrutamiento en la aplicación.
+- **axios**: Cliente HTTP para realizar solicitudes a la API.
+- **zustand**: Para manejar el estado global de la aplicación.
+- **@tanstack/react-query**: Para manejar el estado de datos asíncronos.
+- **shadcn**: Para componentes UI preconstruidos y estilizados.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Dependencias de desarrollo:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **typescript**: Para añadir tipado estático al proyecto.
+- **vite**: Herramienta de construcción rápida para proyectos frontend.
+- **eslint**: Para mantener un código limpio y consistente.
+- **prettier**: Para formatear el código automáticamente.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> **Nota:** Asegúrate de configurar correctamente las variables de entorno en el archivo `.env` antes de iniciar el proyecto.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+Este proyecto utiliza el stack **PERN** (PostgreSQL, Express, React, Node.js).
