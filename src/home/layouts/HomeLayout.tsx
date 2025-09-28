@@ -2,7 +2,7 @@ import { useAuthStore } from "@/auth/store/auth.store";
 import { CustomLoader } from "@/components/ui/CustomLoader";
 import { Navigate, Outlet } from "react-router";
 
-export const HomeLayout = () => {
+const HomeLayout = () => {
   const { status } = useAuthStore();
 
   if (status === "pending") {
@@ -19,3 +19,5 @@ export const HomeLayout = () => {
     </>
   );
 };
+
+export default HomeLayout;

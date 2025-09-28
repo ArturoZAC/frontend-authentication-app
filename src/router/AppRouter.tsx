@@ -1,7 +1,9 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import {
+  /* createBrowserRouter, */ createHashRouter,
+  Navigate,
+} from "react-router";
 
 // HOME PAGE
-import { HomeLayout } from "@/home/layouts/HomeLayout";
 import { DashboardPage } from "@/home/pages/DashboardPage";
 import { HomePage } from "@/home/pages/HomePage";
 
@@ -12,8 +14,12 @@ import { RegisterPage } from "@/auth/pages/RegistePage";
 import { ResetPasswordPage } from "@/auth/pages/ResetPassword";
 import { VerifyEmail } from "@/auth/pages/VerifyEmail";
 import { ResetPasswordWithCode } from "@/auth/pages/ResetPasswordWithCode";
+import { lazy } from "react";
 
-export const Approuter = createBrowserRouter([
+const HomeLayout = lazy(() => import("../home/layouts/HomeLayout"));
+
+// export const Approuter = createBrowserRouter([
+export const Approuter = createHashRouter([
   {
     path: "/",
     element: <HomeLayout />,
