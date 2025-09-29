@@ -50,8 +50,8 @@ export const HomePage = () => {
 
       <div className="mx-auto max-w-[80rem] px-4 py-8">
         {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-8"> */}
-        <div className="grid grid-cols-3 gap-x-4">
-          <Card className="col-span-2">
+        <div className="grid grid-cols-3 gap-x-4 max-md:grid-cols-1 max-md:space-y-4">
+          <Card className="col-span-2 max-md:col-span-1">
             <CardHeader>
               <CardTitle className="text-2xl text-primary">
                 Bienvenido, {user?.name}
@@ -60,8 +60,8 @@ export const HomePage = () => {
                 Información de tu perfil personal
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center space-x-10">
+            <CardContent className="space-y-6 max-lg:px-4">
+              <div className="flex items-center space-x-10 max-lg:space-x-0 max-lg:justify-between max-sm:flex-col max-sm:space-y-4">
                 <div className="flex flex-row justify-center items-center gap-x-4">
                   <Avatar className="w-20 h-20">
                     <AvatarImage src={"/placeholder.svg"} alt={user?.name} />

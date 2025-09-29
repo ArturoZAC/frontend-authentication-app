@@ -12,7 +12,6 @@ import { CustomLoader } from "@/components/ui/CustomLoader";
 
 export const DashboardPage = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-
   const { users } = useUsers();
 
   if (users.isLoading) {
@@ -23,16 +22,16 @@ export const DashboardPage = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card">
-        <div className="mx-auto p-6 max-w-[80rem]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/">
+        <div className="mx-auto p-6 max-w-[80rem] max-sm:px-4">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x- w-full justify-between">
+              <Link to="/" className="mx-0">
                 <Button variant="default" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-4 h-4" />
                   Volver al Dashboard
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-foreground">
+              <h1 className="text-2xl font-bold text-foreground max-sm:text-end max-sm:text-xl">
                 Usuarios Registrados
               </h1>
             </div>
@@ -45,7 +44,7 @@ export const DashboardPage = () => {
           <Badge className="max-h-full text-base">
             Total: {users.data?.length}
           </Badge>
-          <div className="grid grid-cols-2 gap-x-4">
+          <div className="grid grid-cols-2 gap-x-4 max-md:hidden">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="sm"
@@ -81,13 +80,20 @@ export const DashboardPage = () => {
                 : "space-y-4"
             }
           >
-            {users.data?.map((user) =>
-              viewMode === "grid" ? (
-                <UserCard key={user.id} user={user} />
-              ) : (
-                <UserListItem key={user.id} user={user} />
-              )
-            )}
+            {users.data?.map((user) => (
+              <div className="md:hidden" key={user.id}>
+                <UserCard user={user} />
+              </div>
+            ))}
+            {users.data?.map((user) => (
+              <div className="hidden md:block" key={user.id}>
+                {viewMode === "grid" ? (
+                  <UserCard user={user} />
+                ) : (
+                  <UserListItem user={user} />
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
