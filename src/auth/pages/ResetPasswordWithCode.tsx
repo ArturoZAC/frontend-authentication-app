@@ -148,16 +148,16 @@ export const ResetPasswordWithCode = () => {
             <Button
               type="submit"
               className="w-full mt-2"
-              // disabled={mutationResetPasswordWithEmail.isPending}
+              disabled={mutationResetPasswordWithCode.isPending}
             >
-              {/* {mutationResetPasswordWithEmail.isPending ? (
+              {mutationResetPasswordWithCode.isPending ? (
                 <span className="flex justify-center items-center">
                   <span className="inline-block w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin mr-2"></span>
                   Procesando...
                 </span>
-              ) : ( */}
-              <> Actualizar Contraseña </>
-              {/* )} */}
+              ) : (
+                <>Actualizar Contraseña</>
+              )}
             </Button>
           </form>
         </CardContent>
